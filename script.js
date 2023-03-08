@@ -10,12 +10,14 @@ let level = 0;
 let live = 3;
 let lives = document.getElementById('lives');
 let nuevojuego = document.getElementById('nuevo');
-
+let pResult= document.getElementById('pResult')
 let time = document.getElementById('time');
 let timeStar;
 let timeInterval;
 
 lives.textContent='💗💗💗'
+localStorage.setItem('record_time', 35000)
+pResult.textContent=localStorage['record_time']
 
 const player = {
     x: undefined,
@@ -43,7 +45,8 @@ function resizegame(){
     canvas.setAttribute('height', canvaSize);
 
     elementSize = canvaSize/10;
-
+    player.x= undefined;
+    player.y= undefined;
     starGame();
 }
 // inicializar el juego
@@ -105,9 +108,24 @@ function gameWin(){
         demo.textContent='GANASTE!!!!';
         nuevojuego.style.visibility='visible';
         clearInterval(timeInterval);
+
+        const recordTime = localStorage.getItem('record_time');
+        const playerTime = Date.now() - timeStar;
+        localStorage.setItem('record_time', 50000)
+        
+        if (recordTime) {
+            if (recordTime >= playerTime) {
+            localStorage.setItem('record_time', playerTime);
+            pResult.innerHTML = 'SUPERASTE EL RECORD :)';
+            } else {
+            pResult.innerHTML = 'lo siento, no superaste el records :(';
+            }
+        } 
+
+        console.log({recordTime, playerTime});
         return
     }
-}
+};
 
 //movimiento del jugador
 function movePlayer(){  
@@ -147,8 +165,6 @@ function movePlayer(){
     }
     game.fillText(emojis['PLAYER'],player.x, player.y)
 }
-
-
 
 // movimiento de la consola
 window.addEventListener('keydown', moveKey);
@@ -212,4 +228,4 @@ function mostrarTiempo() {
 //nuevo juego
 nuevojuego.addEventListener('click', ()=>{
     location.reload()
-})
+});
