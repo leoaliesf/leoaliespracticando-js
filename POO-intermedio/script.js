@@ -62,7 +62,7 @@ const objt1 = {
 
 
 
-// deep COPY
+// deep COPY  de esta manera s copia objetos hasta con sus metodos. 
 function isObject(subject) {
     return typeof subject == "object"
 }
@@ -98,4 +98,16 @@ function deepcopy(subject) {
     return copySubject
 }
 
-const objt6 = deepcopy(objt1);
+const objt6 = deepcopy(objt1); // no cambia ni el objeto principal o padre ni el objeto creado, son totalmente distintos.
+
+function deepFreeze(obj) {  // una función aplica Object.freeze a todos los objetos anidados de forma recursiva para así realmente lograr bloquear todo el objeto
+    if (typeof (obj) !== "object") return obj;
+  
+    Object.freeze(obj);
+  
+    for (let key in obj) {
+      deepFreeze(obj[key])
+    }
+    return obj;
+  }
+  
