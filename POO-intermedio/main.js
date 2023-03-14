@@ -34,25 +34,56 @@ function deepcopy(subject) {
     return copySubject
 }
 
-const studentBase = {
-    name: undefined,
-    email: undefined,
-    age: undefined,
-    approvedCourses: undefined,
-    learninPath: undefined,
-    socialMedia:{
-        twitter: undefined,
-        instagram: undefined,
-        facebook: undefined,
-    },
-};
+//const studentBase = {
+//     name: undefined,
+//     email: undefined,
+//     age: undefined,
+//     approvedCourses: undefined,
+//     learninPath: undefined,
+//     socialMedia:{
+//         twitter: undefined,
+//         instagram: undefined,
+//         facebook: undefined,
+//     },
+// //};
 
-const juan = deepcopy(studentBase);
+//const juan = deepcopy(studentBase);
 // Object.defineProperty(juan, "name",{
 //     value: "juanito",
 //     configurable: false,
     
 // });
-Object.seal(juan); // no deja que se borre ninguna propiedad de juan mi objeto
+//Object.seal(juan); // no deja que se borre ninguna propiedad de juan mi objeto
 //Object.isSealed(juan); // nos da true si nuestro objeto es protegido (de configurable de borrar la propiedad)
 //Object.isFrozen(juan); // para freeze que tambien incluye writable
+
+function requiredParam(param) {
+    throw new Error(param + " es obligatorio");
+  }
+  
+  function createStudent({
+    name = requiredParam("name"),
+    email = requiredParam("email"),
+    age,
+    twitter,
+    instagram,
+    facebook,
+    approvedCourses = [],
+    learningPaths = [],
+  } = {}) {
+    return {
+      name,
+      email,
+      age,
+      approvedCourses,
+      learningPaths,
+      socialMedia: {
+        twitter,
+        instagram,
+        facebook,
+      },
+    };
+  }
+  
+  const juan = createStudent({ email: "juanito@frijoles.co", name: "Juanito" });
+  
